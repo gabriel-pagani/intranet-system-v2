@@ -102,3 +102,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static_root'
 
 AUTH_USER_MODEL = 'app.Users'
+
+METABASE_SITE_URL = os.getenv('METABASE_SITE_URL')
+
+METABASE_SECRET_KEY = os.getenv('METABASE_SECRET_KEY')
