@@ -39,9 +39,16 @@ class UsersAdmin(UserAdmin):
 
 # Groups Admin
 admin.site.unregister(Group)
+class GroupDashboardsInline(admin.StackedInline):
+    model = GroupDashboards
+    can_delete = False
+    verbose_name_plural = 'Dashboards'
+    filter_horizontal = ('dashboards',)
+    fields = ('dashboards',)
+
 @admin.register(GroupProxy)
 class GroupsAdmin(BaseGroupAdmin):
-    ...
+    inlines = (GroupDashboardsInline,)
 
 
 @admin.register(Setores)
