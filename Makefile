@@ -25,3 +25,6 @@ container-terminal:
 
 containers-logs:
 	@cd deploy/ && docker compose logs -f $(container)
+
+django-shell:
+	@cd deploy/ && docker compose exec app python manage.py shell
