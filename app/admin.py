@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import Group
-from .models import Users, GroupProxy
+from .models import Users, GroupProxy, Setores, Ramais
 
 
 # Users Admin
@@ -42,3 +42,17 @@ admin.site.unregister(Group)
 @admin.register(GroupProxy)
 class GroupsAdmin(BaseGroupAdmin):
     ...
+
+
+@admin.register(Setores)
+class SetoresAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
+
+@admin.register(Ramais)
+class RamaisAdmin(admin.ModelAdmin):
+    list_display = ('get_display_name', 'phone', 'sector', 'machine',)
+    search_fields = ('name', 'user__username', 'user__first_name', 'user__last_name', 'phone', 'sector__name', 'machine',)
+    list_filter = ('sector',)
+    autocomplete_fields = ('sector', 'user')
