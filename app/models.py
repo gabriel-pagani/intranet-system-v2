@@ -61,10 +61,10 @@ class Ramais(models.Model):
     def get_display_name(self):
         if self.user:
             return self.user.get_full_name() or self.user.username
-        return self.name
+        return self.name or 'Sem Nome'
 
     def __str__(self):
-        return f'{self.get_display_name()} - {self.phone}'
+        return self.get_display_name()
 
     class Meta:
         ordering = ['name']
