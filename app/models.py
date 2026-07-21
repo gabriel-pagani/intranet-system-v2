@@ -4,6 +4,18 @@ from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
 
 
+class Setores(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name='Setor')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Setor'
+        verbose_name_plural = 'Setores'
+
+
 class Users(AbstractUser):
     email = models.EmailField(blank=True, null=True, verbose_name='Endereço de email')
     observations = models.TextField(blank=True, null=True, verbose_name='Observações')
@@ -22,18 +34,6 @@ class GroupProxy(Group):
         verbose_name = Group._meta.verbose_name
         verbose_name_plural = Group._meta.verbose_name_plural
         app_label = 'app'
-
-
-class Setores(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Setor')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['name']
-        verbose_name = 'Setor'
-        verbose_name_plural = 'Setores'
 
 
 class Ramais(models.Model):
