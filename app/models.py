@@ -37,7 +37,7 @@ class Dashboards(models.Model):
     metabase_code = models.PositiveSmallIntegerField(blank=True, null=True, unique=True, verbose_name='Código do Metabase')
     powerbi_url = models.CharField(blank=True, null=True, unique=True, validators=[valid_url], verbose_name='Link do Power BI')
     status = models.CharField(max_length=1, choices=STATUS, default="D", verbose_name='Situação')
-    fav_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='indicadores_favoritos', blank=True, verbose_name='Favoritado Por')
+    fav_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='dashboards_favoritos', blank=True, verbose_name='Favoritado Por')
 
     def clean(self):
         if self.metabase_code and self.powerbi_url:
@@ -79,8 +79,8 @@ class GroupProxy(Group):
 
 
 class GroupDashboards(models.Model):
-    group = models.OneToOneField(Group, on_delete=models.CASCADE, related_name='perfil', primary_key=True)
-    dashboards = models.ManyToManyField(Dashboards, related_name='grupos_atribuidos', blank=True)
+    group = models.OneToOneField(Group, on_delete=models.CASCADE, related_name='perfil', primary_key=True, verbose_name='Grupo')
+    dashboards = models.ManyToManyField(Dashboards, related_name='grupos_atribuidos', blank=True, verbose_name='Dashboards')
 
     def __str__(self):
         return self.group.name
