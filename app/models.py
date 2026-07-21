@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
+from .validators import valid_url
 
 
 class Setores(models.Model):
@@ -16,9 +18,49 @@ class Setores(models.Model):
         verbose_name_plural = 'Setores'
 
 
+class Dashboards(models.Model):
+    STATUS = [
+        ('D', 'Em Desenvolvimento'),
+        ('M', 'Em Manutenção'),
+        ('P', 'Em Produção'),
+    ]
+
+    title = models.CharField(max_length=150, unique=True, verbose_name='Título')
+    sector = models.ForeignKey(
+        Setores,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name='Setor',
+        related_name='dashboards'
+    )
+    metabase_code = models.PositiveSmallIntegerField(blank=True, null=True, unique=True, verbose_name='Código do Metabase')
+    powerbi_url = models.CharField(blank=True, null=True, unique=True, validators=[valid_url], verbose_name='Link do Power BI')
+    status = models.CharField(max_length=1, choices=STATUS, default="D", verbose_name='Situação')
+    fav_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='indicadores_favoritos', blank=True, verbose_name='Favoritado Por')
+
+    def clean(self):
+        if self.metabase_code and self.powerbi_url:
+            raise ValidationError(
+                'Preencha apenas o campo "Código do Metabase" ou o campo "Link do Power BI".'
+            )
+
+    def __str__(self) -> str:
+        return self.title
+
+    class Meta:
+        verbose_name = 'Dashboard'
+        verbose_name_plural = 'Dashboards'
+        ordering = ['sector', 'title']
+        permissions = [
+            ("view_all_dashboards", "Can view all Dashboards"),
+        ]
+
+
 class Users(AbstractUser):
     email = models.EmailField(blank=True, null=True, verbose_name='Endereço de email')
     observations = models.TextField(blank=True, null=True, verbose_name='Observações')
+    dashboards = models.ManyToManyField(Dashboards, related_name='usuarios_atribuidos', blank=True)
 
     def clean(self):
         super().clean()
@@ -34,6 +76,14 @@ class GroupProxy(Group):
         verbose_name = Group._meta.verbose_name
         verbose_name_plural = Group._meta.verbose_name_plural
         app_label = 'app'
+
+
+class GroupDashboards(models.Model):
+    group = models.OneToOneField(Group, on_delete=models.CASCADE, related_name='perfil', primary_key=True)
+    dashboards = models.ManyToManyField(Dashboards, related_name='grupos_atribuidos', blank=True)
+
+    def __str__(self):
+        return self.group.name
 
 
 class Ramais(models.Model):
