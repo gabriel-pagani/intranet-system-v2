@@ -1,4 +1,5 @@
 from django.contrib import admin
+from reversion.admin import VersionAdmin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import Group
 from .models import Users, GroupProxy, Setores, Ramais, Dashboards, GroupDashboards
@@ -6,7 +7,7 @@ from .models import Users, GroupProxy, Setores, Ramais, Dashboards, GroupDashboa
 
 # Users Admin
 @admin.register(Users)
-class UsersAdmin(UserAdmin):
+class UsersAdmin(VersionAdmin, UserAdmin):
     list_display = ('username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined', 'is_staff', 'is_superuser', 'is_active',)
     search_fields = ('username', 'email', 'first_name', 'last_name', 'observations',)
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'groups',)
@@ -52,13 +53,13 @@ class GroupsAdmin(BaseGroupAdmin):
 
 
 @admin.register(Setores)
-class SetoresAdmin(admin.ModelAdmin):
+class SetoresAdmin(VersionAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
 
 @admin.register(Ramais)
-class RamaisAdmin(admin.ModelAdmin):
+class RamaisAdmin(VersionAdmin):
     list_display = ('get_display_name', 'phone', 'sector', 'machine',)
     search_fields = ('name', 'user__username', 'user__first_name', 'user__last_name', 'phone', 'sector__name', 'machine',)
     list_filter = ('sector',)
@@ -67,7 +68,7 @@ class RamaisAdmin(admin.ModelAdmin):
 
 # Dashboards Admin
 @admin.register(Dashboards)
-class DashboardsAdmin(admin.ModelAdmin):
+class DashboardsAdmin(VersionAdmin):
     list_display = ('title', 'sector', 'status')
     search_fields = ('title', 'sector__name')
     filter_horizontal = ('fav_by',)
