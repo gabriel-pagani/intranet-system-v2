@@ -83,6 +83,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     'app.backends.EmailModelBackend',
+    'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -130,7 +131,6 @@ AUTH_LDAP_USER_ATTR_MAP = {
     "first_name": "givenName",
     "last_name": "sn",
     "email": "mail",
-    "username": "uid",
 }
 
 AUTH_LDAP_ALWAYS_UPDATE_USER = True
