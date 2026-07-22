@@ -1,5 +1,6 @@
 from django.contrib import admin
 from reversion.admin import VersionAdmin
+import reversion
 from django.contrib.auth.admin import UserAdmin, GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import Group
 from .models import Users, GroupProxy, Setores, Ramais, Dashboards, GroupDashboards
@@ -39,6 +40,9 @@ class UsersAdmin(VersionAdmin, UserAdmin):
 
 
 # Groups Admin
+reversion.register(Group)
+reversion.register(GroupProxy)
+reversion.register(GroupDashboards)
 admin.site.unregister(Group)
 class GroupDashboardsInline(admin.StackedInline):
     model = GroupDashboards
@@ -48,7 +52,7 @@ class GroupDashboardsInline(admin.StackedInline):
     fields = ('dashboards',)
 
 @admin.register(GroupProxy)
-class GroupsAdmin(BaseGroupAdmin):
+class GroupsAdmin(VersionAdmin, BaseGroupAdmin):
     inlines = (GroupDashboardsInline,)
 
 
