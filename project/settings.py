@@ -105,6 +105,8 @@ STATIC_ROOT = BASE_DIR / 'static_root'
 
 AUTH_USER_MODEL = 'app.Users'
 
+ADMIN_PANEL_PATH = os.getenv('ADMIN_PANEL_PATH', 'admin')
+
 METABASE_SITE_URL = os.getenv('METABASE_SITE_URL')
 
 METABASE_SECRET_KEY = os.getenv('METABASE_SECRET_KEY')
