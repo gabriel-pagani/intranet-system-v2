@@ -1,0 +1,64 @@
+{% extends 'global/global.html' %}
+{% load static %}
+
+{% block title %}Ramais{% endblock title %}
+
+{% block head %}
+        <link href="{% static 'app/css/ramais.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block body %}
+        <div id="content" class="container">
+            <div class="header">
+                {% if user.is_authenticated %}
+                <a href="#">
+                    <img src="{% static 'global/images/black_logo.png' %}" alt="Logo SMI" class="logo" id="logo-img" title="Voltar ao Menu Principal"/>
+                </a>
+                {% else %}
+                <a href="#">
+                    <img src="{% static 'global/images/black_logo.png' %}" alt="Logo SMI" class="logo" id="logo-img" title="Recarregar a Página"/>
+                </a>
+                {% endif %}
+                <div class="header-text">
+                    <h1>Lista de Ramais</h1>
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Pesquise aqui..." oninput="filtrarRamais()"/>
+                    </div>
+                </div>
+            </div>
+            <table id="lista-ramais">
+                <thead>
+                    <tr>
+                    <th><div class="header-cell">Nome</div></th>
+                    <th><div class="header-cell">Ramal</div></th>
+                    <th><div class="header-cell">Setor</div></th>
+                    {% if request.user.is_staff %}
+                    <th><div class="header-cell">Máquina</div></th>
+                    {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ramal in ramais_data %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <div class="machine-cell">
+                                    
+                                </div>
+                            </td>
+                        <tr/>
+                        <div class="row"> 
+                            {{ i }} 
+                        </div> 
+                    {% endfor %} 
+                </tbody>
+            </table>
+            <div id="paginacao" class="paginacao-container"></div>
+        </div>
+        <script>
+            const isStaff = {% if request.user.is_staff %}true{% else %}false{% endif %};
+        </script>
+        <script src="{% static 'app/js/ramais.js' %}"></script>
+{% endblock body %}
