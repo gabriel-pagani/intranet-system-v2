@@ -5,5 +5,5 @@ app_name = 'app'
 
 urlpatterns = [
     path('ramais/', ramais_view, name='ramais'),
-    path('ramais/api/', ramais_json, name='ramais_json'),
+    path('ramais/json/', ramais_json, name='ramais_json'),
 ]
